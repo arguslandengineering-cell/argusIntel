@@ -9,12 +9,12 @@
 // ============================================================
 
 const FIREBASE_CONFIG = {
-  apiKey: "PASTE_YOUR_apiKey_HERE",
-  authDomain: "PASTE_YOUR_authDomain_HERE",
-  projectId: "PASTE_YOUR_projectId_HERE",
-  storageBucket: "PASTE_YOUR_storageBucket_HERE",
-  messagingSenderId: "PASTE_YOUR_messagingSenderId_HERE",
-  appId: "PASTE_YOUR_appId_HERE"
+ apiKey: "AIzaSyDq57mlVp1reCIzkXzlxtBvZE3X488Il8A",
+  authDomain: "argusintel-bb274.firebaseapp.com",
+  projectId: "argusintel-bb274",
+  storageBucket: "argusintel-bb274.firebasestorage.app",
+  messagingSenderId: "773547346108",
+  appId: "1:773547346108:web:201779d997851fbd8c28b9"
 };
 
 // ============================================================
