@@ -103,40 +103,62 @@
      INLINE SCRIPTS
      ============================================================ -->
 <script>
-  // Demo login shortcut — fills input and triggers login
+  // Demo login shortcut
   function demoLogin(name) {
     document.getElementById('name-input').value = name;
-    window.argus.login(name);
+    if (window.argus) window.argus.login(name);
   }
 
   // Enter key on login input
   document.getElementById('name-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') window.argus.login(this.value);
+    if (e.key === 'Enter' && window.argus) window.argus.login(this.value);
   });
 
-  // Show loader immediately while module loads
-  document.getElementById('app-loader').style.display = 'flex';
+  // Safety net — if loader is still showing after 4 seconds, hide it
+  // and show the login screen so the app is never permanently stuck
+  setTimeout(function() {
+    var loader = document.getElementById('app-loader');
+    var login  = document.getElementById('login-view');
+    if (loader && loader.style.display !== 'none') {
+      loader.style.display = 'none';
+      if (login) login.classList.remove('hidden');
+      console.warn('ArgusIntel: loader timeout — showing login screen. Check console for module errors.');
+    }
+  }, 4000);
 </script>
 
 <!-- ============================================================
      MAIN APP MODULE (ES module — supports dynamic imports)
      ============================================================ -->
 <script type="module">
-  import './js/app.js';
-
-  // Hide loader once module is parsed (actual data load is async)
-  document.getElementById('app-loader').style.display = 'none';
+  try {
+    await import('./js/app.js');
+  } catch (err) {
+    console.error('ArgusIntel module load error:', err);
+  } finally {
+    // Always hide loader — even if module errored
+    var loader = document.getElementById('app-loader');
+    if (loader) loader.style.display = 'none';
+    // If window.argus never got set, show login screen manually
+    if (!window.argus) {
+      var login = document.getElementById('login-view');
+      if (login) login.classList.remove('hidden');
+    }
+  }
 </script>
 
 <!-- ============================================================
      SERVICE WORKER REGISTRATION
+     — uses relative path so it works on any GitHub Pages username
      ============================================================ -->
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/argusintel/sw.js', { scope: '/argusintel/' })
-        .then(reg => console.log('ArgusIntel SW registered, scope:', reg.scope))
-        .catch(err => console.warn('SW registration failed:', err));
+      // Derive SW path from current page location — works for any repo name
+      var swPath = location.pathname.replace(/\/[^/]*$/, '/') + 'sw.js';
+      navigator.serviceWorker.register(swPath)
+        .then(reg => console.log('ArgusIntel SW registered:', reg.scope))
+        .catch(err => console.warn('SW registration failed (non-critical):', err));
     });
   }
 </script>
