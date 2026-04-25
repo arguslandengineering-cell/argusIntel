@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1628" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ArgusIntel" />
+  <meta name="description" content="Land Planning & Engineering Intelligence System" />
+
+  <title>ArgusIntel</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Apple touch icon fallback (place icon-192.png in /icons/) -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<!-- ============================================================
+     GLOBAL LOADER — shown during login/init
+     ============================================================ -->
+<div id="app-loader">
+  <div class="loader-eye"></div>
+  <div class="loader-text">LOADING ARGUSINTEL</div>
+</div>
+
+<!-- ============================================================
+     GLOBAL MODAL OVERLAY — injected by app.js
+     ============================================================ -->
+<div id="argus-modal-overlay"></div>
+
+<!-- ============================================================
+     APP ROOT
+     ============================================================ -->
+<div id="argus-root">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="app-logo">
+      <div class="logo-eye"></div>
+      <div>
+        <div class="app-logo-text">ArgusIntel</div>
+        <div class="app-logo-sub">Land Planning & Engineering</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <span id="role-display" class="role-badge hidden"></span>
+      <span id="user-display" style="display:none;font-size:12px;color:#9FE1CB;"></span>
+    </div>
+  </header>
+
+  <!-- ── LOGIN SCREEN ── -->
+  <div id="login-view" class="login-screen">
+    <div class="login-card">
+      <div>
+        <div class="login-title">Sign in to ArgusIntel</div>
+        <div class="login-sub" style="margin-top:4px;">Enter your name to continue</div>
+      </div>
+      <div>
+        <input
+          type="text"
+          id="name-input"
+          class="form-input"
+          placeholder="Your name..."
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="words"
+          spellcheck="false"
+        />
+      </div>
+      <button class="login-btn" onclick="window.argus.login(document.getElementById('name-input').value)">
+        Enter
+      </button>
+      <div class="login-hint">Demo — tap a name to sign in as that role</div>
+      <div class="demo-pills">
+        <span class="demo-pill" onclick="demoLogin('Charles')">Charles (Manager)</span>
+        <span class="demo-pill" onclick="demoLogin('Ana')">Ana (Core)</span>
+        <span class="demo-pill" onclick="demoLogin('Marco')">Marco (Site Eng)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── APP SHELL (post-login) ── -->
+  <div id="app-view" class="hidden" style="flex:1;display:flex;flex-direction:column;min-height:0;">
+    <!-- Tab bar injected by app.js -->
+    <div id="tab-bar" class="tab-bar"></div>
+    <!-- Tab content injected by app.js -->
+    <div id="tab-content" class="tab-content"></div>
+    <!-- Footer -->
+    <footer class="app-footer" id="app-footer"></footer>
+  </div>
+
+</div><!-- /#argus-root -->
+
+<!-- ============================================================
+     INLINE SCRIPTS
+     ============================================================ -->
+<script>
+  // Demo login shortcut — fills input and triggers login
+  function demoLogin(name) {
+    document.getElementById('name-input').value = name;
+    window.argus.login(name);
+  }
+
+  // Enter key on login input
+  document.getElementById('name-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') window.argus.login(this.value);
+  });
+
+  // Show loader immediately while module loads
+  document.getElementById('app-loader').style.display = 'flex';
+</script>
+
+<!-- ============================================================
+     MAIN APP MODULE (ES module — supports dynamic imports)
+     ============================================================ -->
+<script type="module">
+  import './js/app.js';
+
+  // Hide loader once module is parsed (actual data load is async)
+  document.getElementById('app-loader').style.display = 'none';
+</script>
+
+<!-- ============================================================
+     SERVICE WORKER REGISTRATION
+     ============================================================ -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/argusintel/sw.js', { scope: '/argusintel/' })
+        .then(reg => console.log('ArgusIntel SW registered, scope:', reg.scope))
+        .catch(err => console.warn('SW registration failed:', err));
+    });
+  }
+</script>
+
+</body>
+</html>
