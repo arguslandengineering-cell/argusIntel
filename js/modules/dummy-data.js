@@ -9,11 +9,8 @@
 // ============================================================
 
 export const DUMMY_ROSTER = [
-  { name: 'Charles', key: 'charles', role: 'Manager', site: 'All' },
+  { name: 'Charles', key: 'charles', role: 'Manager',   site: 'All' },
   { name: 'Ana',     key: 'ana',     role: 'Core Team', site: 'Site A' },
-  { name: 'Ben',     key: 'ben',     role: 'Core Team', site: 'Site C' },
-  { name: 'Lei',     key: 'lei',     role: 'Core Team', site: 'Site B' },
-  { name: 'Marco',   key: 'marco',   role: 'Site Engineer', site: 'Site C' },
 ];
 
 export const DUMMY_TASKS = [
