@@ -95,29 +95,46 @@ async function loadData() {
 // LOGIN FLOW
 // ============================================================
 export async function login(inputName) {
+  const trimmed = (inputName || '').trim();
+  if (!trimmed) return;
+
   showLoader(true);
 
-  // Init Firebase
-  if (!STATE.db) STATE.db = await initFirebase();
+  try {
+    // Init Firebase — safe, returns null if config is placeholder
+    if (!STATE.db) STATE.db = await initFirebase();
 
-  // Load settings (version test flag)
-  const settings = await loadSettings(STATE.db);
-  STATE.versionTest = settings.versionTest;
-  STATE.version     = settings.version || 'v0.1';
+    // Load settings — safe, returns defaults if no Firebase
+    const settings = await loadSettings(STATE.db);
+    STATE.versionTest = settings.versionTest || false;
+    STATE.version     = settings.version || 'v0.1';
 
-  // Roster check
-  const user = await checkRoster(inputName, STATE.db);
-  STATE.currentUser = user.name;
-  STATE.currentRole = user.role;
-  STATE.currentSite = user.site;
+    // Roster check — falls back to dummy roster if no Firebase
+    const user = await checkRoster(trimmed, STATE.db);
+    STATE.currentUser = user.name;
+    STATE.currentRole = user.role;
+    STATE.currentSite = user.site;
 
-  // Load data
-  await loadData();
+    // Load data — uses dummy data if no Firebase or versionTest on
+    await loadData();
+
+  } catch (err) {
+    console.error('ArgusIntel login error:', err);
+    // Still allow access with dummy data so app is never blocked
+    const displayName = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+    STATE.currentUser = displayName;
+    STATE.currentRole = 'Site Engineer';
+    STATE.currentSite = 'Unassigned';
+    STATE.tasks     = DUMMY_TASKS;
+    STATE.csws      = DUMMY_CSW;
+    STATE.roster    = DUMMY_ROSTER;
+    STATE.recall    = DUMMY_RECALL;
+    STATE.digest    = DUMMY_DIGEST;
+    STATE.standards = DUMMY_STANDARDS;
+  }
 
   STATE.loading = false;
   showLoader(false);
-
-  // Render app
   renderApp();
 }
 
