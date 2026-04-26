@@ -17,7 +17,7 @@ export const DUMMY_TASKS = [
   {
     id: 'T-041', desc: 'Road alignment study — Phase 2 submission package',
     person: 'Ana', status: 'Ongoing', priority: 'High', gravity: 'red',
-    deadline: '2025-04-26', daysActive: 14, notes: 3,
+    deadline: '2026-05-10', daysActive: 14, notes: 3,
     cswRef: 'CSW-019', site: 'Site A',
     notesHistory: [
       { author: 'Ana', date: '2025-04-20', text: 'Revised alignment per client comment on curve radius' },
@@ -28,7 +28,7 @@ export const DUMMY_TASKS = [
   {
     id: 'T-039', desc: 'Earthfill volume calculation — revised per client comment',
     person: 'Ana', status: 'Ongoing', priority: 'Medium', gravity: 'amber',
-    deadline: '2025-04-30', daysActive: 7, notes: 1,
+    deadline: '2026-05-15', daysActive: 7, notes: 1,
     cswRef: null, site: 'Site A',
     notesHistory: [
       { author: 'Ana', date: '2025-04-18', text: 'Client requested 15% reduction in fill volume at north berm' },
@@ -36,38 +36,38 @@ export const DUMMY_TASKS = [
   },
   {
     id: 'T-037', desc: 'Retaining wall slope check — Site C access road',
-    person: 'Ben', status: 'Blocked', priority: 'High', gravity: 'red',
-    deadline: '2025-05-02', daysActive: 21, notes: 5,
+    person: 'Ana', status: 'Blocked', priority: 'High', gravity: 'red',
+    deadline: '2026-05-20', daysActive: 21, notes: 5,
     cswRef: 'CSW-031', site: 'Site C',
     notesHistory: [
-      { author: 'Ben', date: '2025-04-02', text: 'Initial measurement taken — slope at 1:1.2 vs 1:1.5 standard' },
-      { author: 'Ben', date: '2025-04-08', text: 'Awaiting site access clearance for re-survey' },
+      { author: 'Ana', date: '2025-04-02', text: 'Initial measurement taken — slope at 1:1.2 vs 1:1.5 standard' },
+      { author: 'Ana', date: '2025-04-08', text: 'Awaiting site access clearance for re-survey' },
       { author: 'Charles', date: '2025-04-10', text: 'Escalated to CSW-031. Flagged to site coordinator.' },
-      { author: 'Ben', date: '2025-04-15', text: 'Access still not granted. Blocked.' },
+      { author: 'Ana', date: '2025-04-15', text: 'Access still not granted. Blocked.' },
       { author: 'Charles', date: '2025-04-22', text: 'Following up with site owner. Priority raised.' },
     ]
   },
   {
     id: 'T-033', desc: 'Standard drainage buffer audit — all active sites',
-    person: 'Lei', status: 'Pending', priority: 'Low', gravity: 'green',
-    deadline: '2025-05-10', daysActive: 3, notes: 0,
+    person: 'Charles', status: 'Pending', priority: 'Low', gravity: 'green',
+    deadline: '2026-05-28', daysActive: 3, notes: 0,
     cswRef: 'CSW-014', site: 'All',
     notesHistory: []
   },
   {
     id: 'T-029', desc: 'Geotechnical boring log review — Site B expansion area',
-    person: 'Lei', status: 'Pending', priority: 'Medium', gravity: 'amber',
-    deadline: '2025-05-15', daysActive: 5, notes: 2,
+    person: 'Charles', status: 'Pending', priority: 'Medium', gravity: 'amber',
+    deadline: '2026-06-05', daysActive: 5, notes: 2,
     cswRef: null, site: 'Site B',
     notesHistory: [
-      { author: 'Lei', date: '2025-04-19', text: 'Boring logs received from sub-contractor' },
-      { author: 'Lei', date: '2025-04-21', text: 'SPT values at 6m depth below design standard — flagging' },
+      { author: 'Charles', date: '2025-04-19', text: 'Boring logs received from sub-contractor' },
+      { author: 'Charles', date: '2025-04-21', text: 'SPT values at 6m depth below design standard — flagging' },
     ]
   },
   {
     id: 'T-025', desc: 'Monthly accomplishment report — April 2025',
     person: 'Charles', status: 'Ongoing', priority: 'Medium', gravity: 'amber',
-    deadline: '2025-04-30', daysActive: 2, notes: 0,
+    deadline: '2026-05-15', daysActive: 2, notes: 0,
     cswRef: null, site: 'All',
     notesHistory: []
   },
@@ -76,7 +76,7 @@ export const DUMMY_TASKS = [
 export const DUMMY_CSW = [
   {
     id: 'CSW-031', title: 'Retaining wall slope exceedance — Site C access road',
-    type: 'Structural', site: 'Site C', owner: 'Ben', gravity: 'red',
+    type: 'Structural', site: 'Site C', owner: 'Ana', gravity: 'red',
     status: 'Ongoing', priority: 'High',
     situation: 'Measured slope ratio 1:1.2 exceeds standard 1:1.5 at access road retaining wall.',
     impact: 'Risk of soil movement and road instability during heavy rain. Site access may be compromised.',
