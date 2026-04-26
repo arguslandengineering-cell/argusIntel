@@ -115,6 +115,9 @@ export async function login(inputName) {
     STATE.currentRole = user.role;
     STATE.currentSite = user.site;
 
+    // Save session — name remembered across reloads
+    try { localStorage.setItem("argus_session", user.name); } catch {}
+
     // Load data — uses dummy data if no Firebase or versionTest on
     await loadData();
 
@@ -123,7 +126,7 @@ export async function login(inputName) {
     // Still allow access with dummy data so app is never blocked
     const displayName = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
     STATE.currentUser = displayName;
-    STATE.currentRole = 'Site Engineer';
+    STATE.currentRole = 'Site Admin';
     STATE.currentSite = 'Unassigned';
     STATE.tasks     = DUMMY_TASKS;
     STATE.csws      = DUMMY_CSW;
@@ -155,7 +158,7 @@ export async function toggleVersionTest(enabled) {
 const TAB_CONFIG = {
   Manager:      ['home','work','csw','daily','report','standard'],
   'Core Team':  ['home','work','csw','daily','report','standard'],
-  'Site Engineer': ['home','work','csw'],
+  'Site Admin': ['home','work','csw'],
 };
 
 const TAB_LABELS = {
@@ -219,9 +222,11 @@ function renderApp() {
   document.getElementById('role-display').classList.remove('hidden');
   document.getElementById('user-display').textContent = STATE.currentUser;
   document.getElementById('user-display').style.display = 'block';
+  const lb = document.getElementById('logout-btn');
+  if (lb) lb.classList.remove('hidden');
 
   // Build tab bar
-  const tabs = TAB_CONFIG[STATE.currentRole] || TAB_CONFIG['Site Engineer'];
+  const tabs = TAB_CONFIG[STATE.currentRole] || TAB_CONFIG['Site Admin'];
   const bar = document.getElementById('tab-bar');
   bar.innerHTML = '';
   tabs.forEach(id => {
@@ -350,12 +355,42 @@ export function closeModal() {
 // ============================================================
 // GLOBAL API — accessible from inline HTML handlers
 // ============================================================
+// ============================================================
+// AUTO-RESUME SESSION — checks localStorage on module load
+// ============================================================
+(function autoResume() {
+  try {
+    const saved = localStorage.getItem('argus_session');
+    if (saved) {
+      const input = document.getElementById('name-input');
+      const loginView = document.getElementById('login-view');
+      if (input && loginView) {
+        // Show saved name hint, auto-login
+        login(saved);
+      }
+    }
+  } catch {}
+})();
+
 window.argus = {
   login,
+  logout() {
+    try { localStorage.removeItem('argus_session'); } catch {}
+    STATE.currentUser = null; STATE.currentRole = null;
+    document.getElementById('app-view').classList.add('hidden');
+    document.getElementById('login-view').classList.remove('hidden');
+    document.getElementById('name-input').value = '';
+    document.getElementById('role-display').classList.add('hidden');
+    document.getElementById('user-display').style.display = 'none';
+    document.getElementById('tab-bar').innerHTML = '';
+    document.getElementById('tab-content').innerHTML = '';
+    document.getElementById('app-footer').innerHTML = '';
+  },
   switchTab,
   toggleVersionTest,
   toast,
   showModal,
   closeModal,
   getState,
+  refreshTab() { renderActiveTab(); },
 };
